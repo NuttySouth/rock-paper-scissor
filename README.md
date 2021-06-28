@@ -1,0 +1,1 @@
+This is the initial Rock Paper Scissor Homework for the Odin Project
