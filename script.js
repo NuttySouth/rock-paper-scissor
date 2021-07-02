@@ -1,59 +1,94 @@
+const options = ["rock", "paper", "scissors"];
+let playerScore = 0;
+let computerScore = 0;
+const display = document.getElementById('UI');
+const computerScoreH2 = document.createElement('h2');
+const playerScoreH2 = document.createElement('h2');
+const playerUISelection = document.createElement('h2');
+const computerUISelection = document.createElement('h2');
+const winnerDeclaration = document.createElement('h2');
+display.appendChild(computerScoreH2);
+display.appendChild(playerScoreH2);
+display.appendChild(playerUISelection);
+display.appendChild(computerUISelection);
+display.appendChild(winnerDeclaration);
+
+const btns = document.getElementsByClassName('btn');
+Array.from(btns).forEach(btn =>{
+    btn.addEventListener('click',getPlayerSelection);
+})
+
 function getIndex(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-const options = ["rock", "paper", "scissor"];
+function computerSelection(){
+    return options[getIndex(0,2)];
+}
 
-function computerPlay(){
-    let decision = options[getIndex(1,2)];
-     return decision;
+function getPlayerSelection(event){
+    const button = event.target;
+    let playerSelection = button.value;
+    playRound(playerSelection, computerSelection());
 }
 
 function whoWins(playerSelection, computerSelection){
-    if(playerSelection == "rock" && computerSelection =="scissor"){
-        console.log("Player Wins");
+    selectionDOM(playerSelection, computerSelection);
+    if(playerSelection == "rock" && computerSelection =="scissors"){
+        return 0;
     } else if(playerSelection == "paper" && computerSelection == "rock"){
-        console.log("Player Wins");
+        return 0;
     } else if(playerSelection == "scissors" && computerSelection =="paper"){
-        console.log("Player Wins");
+        return 0;
     } else if( playerSelection == computerSelection){
-        console.log("It's a TIE");
+        return -1;
     } else {
-        console.log("Computer Wins");
+        return 1;
     }
 }
 
-function getUserInput(){
-    let input = prompt("Enter a selection: ");
-    let playerDecision = input.toLowerCase();
-    if(options.includes(playerDecision)){
-        return playerDecision;
-    }else{
-        console.log("invalid selection!");
-        return null;
+function playRound(playerSelection, computerSelection){
+
+    let whoWinsResult = whoWins(playerSelection, computerSelection);
+    if(whoWinsResult == 0){
+        playerScore++;
+    }else if(whoWinsResult == 1){
+        computerScore++;
     }
-}
-
-function game(){
-
-    for(let i = 0; i <5; i++){
-
-        console.log("Please select an option: ");
-        let playerSelection = getUserInput();
-        while(playerSelection == null){
-            playerSelection = getUserInput();
+    updateScoreDOM();
+    if(playerScore == 5 || computerScore == 5 ){
+        if(playerScore == 5){
+            declareWinner("Player");
+        }else{
+            declareWinner("Computer");
         }
-    
-        let computerSelection = computerPlay();
-        
-        console.log("Player chose: " + playerSelection);
-        console.log("Computer chose: " + computerSelection);
-        whoWins(playerSelection, computerSelection);
-        console.log("###############################################################")
+        initGame();
     }
+}
+
+
+function updateScoreDOM(){
+    computerScoreH2.textContent = "Computer Score: " + computerScore;
+    playerScoreH2.textContent = "Player Score: " + playerScore;
 
 }
 
-game();
+function selectionDOM(playerSelection, computerSelection){
+
+    playerUISelection.textContent = "Player Selected: " + playerSelection;
+    computerUISelection.textContent = "Computer Selected: " + computerSelection;
+
+}
+
+function declareWinner(winner){    
+    winnerDeclaration.textContent = winner + " won the game!";
+}
+
+
+function initGame(){
+    rounds = 0;
+    playerScore = 0;
+    computerScore = 0;
+}
