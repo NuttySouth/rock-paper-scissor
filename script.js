@@ -31,6 +31,9 @@ function computerSelection(){
 function getPlayerSelection(event){
     const button = event.target;
     let playerSelection = button.value;
+    if(winnerDeclaration.text != ""){
+        winnerDeclaration.textContent = "";
+    }
     playRound(playerSelection, computerSelection());
 }
 
